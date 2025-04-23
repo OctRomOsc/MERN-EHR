@@ -58,23 +58,45 @@ app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Save the Swagger documentation to a file
 const outputFilePath = path.join(__dirname+'/docs', 'swagger.json'); // Specify the output file path
-// console.log(outputFilePath);
+console.log(outputFilePath);
 
-// fs.writeFileSync(outputFilePath, JSON.stringify(swaggerDocs, null, 2)); // Save the file
+fs.writeFileSync(outputFilePath, JSON.stringify(swaggerDocs, null, 2)); // Save the file
 
-app.get('/swagger.json', (req: Request, res: Response) => {
+
+/**
+ * @openapi
+ * /api/swagger.json:
+ *   get:
+ *     summary: OpenAPI Spec JSON file
+ *     description: Endpoint for a user to extract API Spec in JSON format
+ *     operationId: getSwaggerJson
+ *     tags:
+ *       - Documentation
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               additionalProperties: true
+ */
+app.get('/api/swagger.json', (req: Request, res: Response) => {
     console.log(outputFilePath);
-    res.send(swaggerDocs); // Serve the Swagger JSON file for external access
+    res.status(200).send(swaggerDocs); // Serve the Swagger JSON file for external access
 });
 
 //test
 
 /**
- * @swagger
+ * @openapi
  * /api/test:
  *   get:
  *     summary: Test endpoint
  *     description: A simple test to check the server
+ *     operationId: getTest
+ *     tags:
+ *       - Test
  *     responses:
  *       200:
  *         description: Successful response
@@ -94,11 +116,14 @@ app.get('/api/test', (req : Request, res : Response) => {
 
 // Registration Route
 /**
- * @swagger
+ * @openapi
  * /api/register:
  *   post:
  *     summary: Register a new user
  *     description: Register a new user in the system
+ *     operationId: postRegister
+ *     tags:
+ *       - User
  *     requestBody:
  *       required: true
  *       content:
@@ -129,17 +154,20 @@ app.post('/api/register', async (req: Request, res: Response) => {
         await user.save(); // Save user to the database
         res.status(201).send('User registered');
     } catch (err : any) {
-        res.status(400).send('Error registering user: ' + err.message);
+        res.status(400).send(err);
     }
 });
 
 // Login Route
 /**
- * @OpenAPI
+ * @openapi
  * /api/login:
  *   post:
  *     summary: Login existing user
  *     description: Login user account with email and password
+ *     operationId: postLogin
+ *     tags:
+ *       - User
  *     requestBody:
  *       required: true
  *       content:

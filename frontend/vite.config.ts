@@ -1,11 +1,18 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-],
-})
+export default defineConfig(({ mode }) => {
+  // Load environment variables from the .env file located at the root
+  const env = loadEnv(mode, '../', '');
+
+  return {
+      plugins: [
+          react(),
+      ],
+      define: {
+          // Make the environment variables available to the application
+          'process.env': env, // Add the environment variables to process.env
+      },
+  }
+});

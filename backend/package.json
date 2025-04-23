@@ -4,7 +4,7 @@
   "description": "electronic health records management",
   "main": "",
   "scripts": {
-    "dev": "nodemon --ext ts,json src/server.ts",
+    "dev": "nodemon --ext ts src/server.ts",
     "start": "tsc && node dist/server.js",
     "prod": "pm2 start dist/server.js -i max"
   },

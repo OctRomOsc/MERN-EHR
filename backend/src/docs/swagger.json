@@ -11,10 +11,37 @@
     }
   ],
   "paths": {
+    "/api/swagger.json": {
+      "get": {
+        "summary": "OpenAPI Spec JSON file",
+        "description": "Endpoint for a user to extract API Spec in JSON format",
+        "operationId": "getSwaggerJson",
+        "tags": [
+          "Documentation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/test": {
       "get": {
         "summary": "Test endpoint",
         "description": "A simple test to check the server",
+        "operationId": "getTest",
+        "tags": [
+          "Test"
+        ],
         "responses": {
           "200": {
             "description": "Successful response"
@@ -26,6 +53,10 @@
       "post": {
         "summary": "Register a new user",
         "description": "Register a new user in the system",
+        "operationId": "postRegister",
+        "tags": [
+          "User"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -54,6 +85,46 @@
           },
           "400": {
             "description": "Error registering user"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "summary": "Login existing user",
+        "description": "Login user account with email and password",
+        "operationId": "postLogin",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User logged in successfully"
+          },
+          "400": {
+            "description": "Error loggin in user"
           }
         }
       }
