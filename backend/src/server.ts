@@ -18,10 +18,10 @@ const port: number | string = process.env.PORT || 3001;
 const jwtSecret: string = process.env.JWT_SECRET!;
 const mongoUri: string = process.env.MONGODB_URI!;
 
-mongoose.connect(mongoUri).catch((err : any) => console.log(err));
-mongoose.connection.on("error", (err : any) => {
-  console.log(err);
-});
+// mongoose.connect(mongoUri).catch((err : any) => console.log(err));
+// mongoose.connection.on("error", (err : any) => {
+//   console.log(err);
+// });
 
 // Set up rate limiter: maximum of 100 requests per 15 minutes per IP
 const limiter : RateLimitRequestHandler = rateLimit({
@@ -152,9 +152,10 @@ app.post('/api/register', async (req: Request, res: Response) => {
         });
 
         await user.save(); // Save user to the database
-        res.status(201).send('User registered');
+        // res.status(201).send('User registered');
+        res.status(201).json({email: user.email})
     } catch (err : any) {
-        res.status(400).send(err);
+        res.status(400).json({error: err.errorResponse.errmsg});
     }
 });
 
@@ -233,7 +234,23 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
 
+
+// Close database connection on exit
+
+process.on('SIGINT', async () => {
+	try {
+	  await mongoose.connection.close();  // Destroy the connection pool
+	  console.log('Closed the database connection.');
+	  process.exit(0);  // Exit the process
+	} catch (err : any) {
+	  console.error('Error closing the database connection:', err.message);
+	  process.exit(1);  // Exit with error code
+	}
+  });
+
 // Start the server
 app.listen(port, () => {
     console.log(`Express is listening at http://localhost:${port}`);
 });
+
+export default app;

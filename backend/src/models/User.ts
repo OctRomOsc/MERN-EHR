@@ -40,8 +40,8 @@ const UserSchema: Schema<IUser> = new Schema({
 // Schema methods
 UserSchema.methods.checkPassword = async function (typedPassword: string): Promise<boolean> {
     try {
-        const match = await argon2.verify(this.password, typedPassword);
-        return match;
+        return await argon2.verify(this.password, typedPassword);
+        
     } catch (err) {
         console.error(err);
         return false; // or handle the error as needed
@@ -50,13 +50,13 @@ UserSchema.methods.checkPassword = async function (typedPassword: string): Promi
 
 UserSchema.methods.hashPassword = async function (password: string): Promise<string> {
     try {
-        const hash = await argon2.hash(password, {
+        return await argon2.hash(password, {
             type: argon2.argon2id,
             memoryCost: 65536, // 64 MB
             timeCost: 3,       // Number of iterations
             parallelism: 1,    // Number of threads
         });
-        return hash;
+       
     } catch (err) {
         console.error(err);
         throw err; // Propagate error if hashing fails
