@@ -57,10 +57,14 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Save the Swagger documentation to a file
-const outputFilePath = path.join(__dirname+'/docs', 'swagger.json'); // Specify the output file path
+const outputFilePath = __dirname+'/docs'; // Specify the output file path
 console.log(outputFilePath);
 
-fs.writeFileSync(outputFilePath, JSON.stringify(swaggerDocs, null, 2)); // Save the file
+if (!fs.existsSync(outputFilePath)){
+    fs.mkdirSync(outputFilePath);
+}
+
+fs.writeFileSync(outputFilePath+'/swagger.json', JSON.stringify(swaggerDocs, null, 2)); // Save the file
 
 
 /**
