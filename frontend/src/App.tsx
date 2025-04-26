@@ -1,6 +1,6 @@
 // import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Register, Login, Home } from "./pages"
+import { RegisterLogin, Login, Home } from "./pages"
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -16,7 +16,7 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route index element={<Register />}/>
+      <Route index element={<RegisterLogin />}/>
       <Route path="/login" element={<Login />}/>
       <Route path="/home" element={<Home />} />
     </Routes>
