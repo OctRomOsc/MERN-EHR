@@ -47,7 +47,7 @@ const ContactSchema = new Schema<IContact>({
 });
 
 const ConditionSchema = new Schema<ICondition>({
-    condition: { type: String, required: true }, // You may want to define a condition code here (e.g., ICD-10)
+    condition: { type: String, required: true }, // Check if HL7/FHIR includes conditionName and conditionCode?
     onsetDate: { type: Date, required: false },
 });
 

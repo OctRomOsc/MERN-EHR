@@ -27,7 +27,8 @@
     },
     "lib": ["es2015"],
     "exclude": [
-      "node_modules" // Typically excluded
+      "node_modules",
+      "dist/__tests__"
     ]
   }
 

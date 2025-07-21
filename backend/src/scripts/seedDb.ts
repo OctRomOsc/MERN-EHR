@@ -15,10 +15,10 @@ mongoose.connect(
 
 const patientSeed : Array<{}> = [
     {
-        id: "dana@gmail.com", // Assuming email is used as the ID
+        id: "placeholder@gmail.com", // Assuming email is used as the ID
         active: true,
         name: ["John Doe"], // Assuming a full name array
-        telecom: ["456-153-6583", "dana@gmail.com"], // Phone and email as telecom
+        telecom: ["123-456-7890", "placeholder@gmail.com"], // Phone and email as telecom
         gender: 'male', // Set gender appropriately 
         birthDate: new Date("1983-01-14T00:00:00Z"), // Use valid Date format
         address: {
@@ -44,10 +44,10 @@ const patientSeed : Array<{}> = [
         date: new Date() // Current date
     },
     {
-        id: "dana@gmail.com", // Assuming email is used as the ID
+        id: "placeholder@gmail.com", // Assuming email is used as the ID
         active: true,
         name: ["Jose Martinez"],
-        telecom: ["456-153-6583", "dana@gmail.com"],
+        telecom: ["123-456-7890", "placeholder@gmail.com"],
         gender: 'male',
         birthDate: new Date("1933-09-24T00:00:00Z"),
         address: {
@@ -64,7 +64,32 @@ const patientSeed : Array<{}> = [
             { medicationCode: "RX004", dosage: "800 mg" } // Use real code here
         ],
         contacts: [
-            { name: "John Doe", relationship: "friend", telecom: "555-123-4567" } // Example contact
+            { name: "John Doe", relationship: "friend", telecom: "098-765-4321" } // Example contact
+        ],
+        date: new Date() // Current date
+    },
+    {
+        id: "admin@admin.ca", // Assuming email is used as the ID
+        active: true,
+        name: ["admin"],
+        telecom: ["123-456-7890", "admin@admin.ca"],
+        gender: 'male',
+        birthDate: new Date("1900-01-01T00:00:00Z"),
+        address: {
+            line: ["001 Placeholder St", "APT 001"],
+            city: "Toronto",
+            stateOrProvince: "ON",
+            postalCode: "M6M4A7",
+            country: "CAN"
+        },
+        healthConditions: [
+            { condition: "Arthritis" }
+        ],
+        medications: [
+            { medicationCode: "RX004", dosage: "800 mg" } // Use real code here
+        ],
+        contacts: [
+            { name: "John Doe", relationship: "friend", telecom: "098-765-4321" } // Example contact
         ],
         date: new Date() // Current date
     },
@@ -86,6 +111,7 @@ const seedPatients : Function = async () => {
         const check : Array<object> = await Patient.find();
         console.log(check);
         
+        await mongoose.connection.close();
         process.exit(0);
     } catch (err) {
         console.error(err);
