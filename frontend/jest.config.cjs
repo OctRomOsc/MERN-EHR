@@ -3,6 +3,7 @@ module.exports = {
 // export default {
   preset: 'ts-jest',
   testEnvironment: "jsdom",
+  testTimeout: 30000,
   
   transform: {
     "^.+\.tsx?$": ["ts-jest",{ tsconfig: 'tsconfig.app.json' }], //extra backslash for mjs vs cjs

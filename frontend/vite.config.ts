@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       ],
       define: {
           // Make the environment variables available to the application
-          'process.env': env, // Add the environment variables to process.env
+          'process.env': env,
       },
   }
 });
