@@ -1,0 +1,109 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'  # Watching for changes in the backend directory
+      - 'frontend/**'  # Watching for changes in the frontend directory
+
+jobs:
+  test-backend:
+    if: contains(github.event.head_commit.message, '[backend]') || github.event.before != github.event.after  # Run if backend files changed
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm install
+
+    - name: Run backend tests
+      env:
+        MONGODB_TEST_URI: ${{ secrets.MONGODB_TEST_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
+        PORT: ${{ secrets.PORT }}
+        API_URL: ${{ secrets.API_URL}}
+        FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+      run: |
+        cd backend
+        npm test
+
+  deploy-backend:
+    needs: test-backend  # Ensure this job runs only if the backend tests pass
+    if: contains(github.event.head_commit.message, '[backend]') || github.event.before != github.event.after  # Run if backend files changed
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Deploy to Render
+      run: |
+        echo "Deploying frontend to Render..."
+        response=$(curl -s -X POST https://api.render.com/v1/services/${{ secrets.RENDER_BACKEND_SERVICE_ID }}/deploys \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}")
+        echo "Deployment response: $response"
+      working-directory: backend
+
+  test-frontend:
+    if: contains(github.event.head_commit.message, '[frontend]') || github.event.before != github.event.after  # Run if frontend files changed
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Run frontend tests
+      run: |
+        cd frontend
+        npm test
+
+  deploy-frontend:
+    needs: test-frontend  # Ensure this job runs only if the frontend tests pass
+    if: contains(github.event.head_commit.message, '[frontend]') || github.event.before != github.event.after  # Run if frontend files changed
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm i && npm run build  # This should create the static files in the build directory
+
+    - name: Deploy to Render
+      run: |
+        echo "Deploying frontend to Render..."
+        response=$(curl -s -X POST https://api.render.com/v1/services/${{ secrets.RENDER_FRONTEND_SERVICE_ID }}/deploys \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}")
+        echo "Deployment response: $response"
+      working-directory: frontend

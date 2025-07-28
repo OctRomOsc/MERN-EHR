@@ -1,0 +1,1 @@
+export {default as mernehr} from './mernehr.png'

@@ -34,21 +34,6 @@
         }
       }
     },
-    "/api/test": {
-      "get": {
-        "summary": "Test endpoint",
-        "description": "A simple test to check the server",
-        "operationId": "getTest",
-        "tags": [
-          "Test"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response"
-          }
-        }
-      }
-    },
     "/api/register": {
       "post": {
         "summary": "Register a new user",
@@ -81,7 +66,15 @@
         },
         "responses": {
           "201": {
-            "description": "User registered successfully"
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": null
+                }
+              }
+            }
           },
           "400": {
             "description": "Error registering user"
@@ -124,7 +117,101 @@
             "description": "User logged in successfully"
           },
           "400": {
-            "description": "Error loggin in user"
+            "description": "Error logging in user"
+          }
+        }
+      }
+    },
+    "/api/verify": {
+      "get": {
+        "summary": "Verify token validity",
+        "description": "Check if token is expired/if user is still logged in",
+        "operationId": "getVerify",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User still logged in with valid token"
+          },
+          "401": {
+            "description": "User session has expired"
+          },
+          "403": {
+            "description": "User session ended due to token error"
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "summary": "Logout current user",
+        "description": "Clears the authentication cookie, logging out the user.",
+        "operationId": "postLogout",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully logged out"
+          },
+          "401": {
+            "description": "User not authenticated"
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "post": {
+        "summary": "Retrieve user patient data",
+        "description": "Queries the user's id (email address) and returns their personal medical information.",
+        "operationId": "postDashboard",
+        "tags": [
+          "User",
+          "Patient"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved Patient data"
+          },
+          "401": {
+            "description": "Error retrieving Patient data"
+          }
+        }
+      }
+    },
+    "/api/update": {
+      "patch": {
+        "summary": "Update user patient data",
+        "description": "Updates the user's patient information with what they entered.",
+        "operationId": "postUpdate",
+        "tags": [
+          "Patient"
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully updated Patient data"
+          },
+          "401": {
+            "description": "Error updating Patient data"
           }
         }
       }

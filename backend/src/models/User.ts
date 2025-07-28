@@ -44,7 +44,7 @@ UserSchema.methods.checkPassword = async function (typedPassword: string): Promi
         
     } catch (err) {
         console.error(err);
-        return false; // or handle the error as needed
+        return false;
     }
 };
 

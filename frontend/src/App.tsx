@@ -1,25 +1,19 @@
-// import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { RegisterLogin, Login, Home } from "./pages"
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+import {PrivateRoute, Footer} from "./components";
+import { RegisterLogin, Home } from "./pages"
 import './App.css'
 
 function App() {
-  // const [count, setCount] = useState<number>(0)
-  // const [data, setData] = useState<string>()
-
-  const apiUrl : string = process.env.VITE_API_URL!; // Default for local dev
-  console.log(apiUrl);
-  
 
   return (
     <BrowserRouter>
     <Routes>
       <Route index element={<RegisterLogin />}/>
-      <Route path="/login" element={<Login />}/>
-      <Route path="/home" element={<Home />} />
+      <Route element={<PrivateRoute/>}>
+        <Route path="/home" element={<Home />} />
+      </Route>
     </Routes>
+    <Footer/>
    </BrowserRouter>  
   )
 }

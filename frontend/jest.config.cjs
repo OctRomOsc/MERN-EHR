@@ -3,9 +3,11 @@ module.exports = {
 // export default {
   preset: 'ts-jest',
   testEnvironment: "jsdom",
+  testTimeout: 30000,
   
   transform: {
     "^.+\.tsx?$": ["ts-jest",{ tsconfig: 'tsconfig.app.json' }], //extra backslash for mjs vs cjs
+    "\\.(png|jpg|jpeg|gif|svg)$": "jest-transform-stub"
   },
   moduleNameMapper: {
     '\\.(css|less|scss)$': 'identity-obj-proxy', // Handle style imports
